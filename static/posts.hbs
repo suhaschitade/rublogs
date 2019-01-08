@@ -1,13 +1,45 @@
 {{#*inline "page"}}
 
+        <!-- Page Header -->
+<header class="masthead" style="background-image: url('http://localhost:8000/img/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>Tech Blog</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
 <section id="posts">
-    <h1>Here's another page!</h1>
-    <ul>
-        {{#each items}}
-        <li>{{{ this.title }}} &nbsp; &nbsp; {{ this.created_at }} </li>
-        {{/each}}
-    </ul>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <h1>My blogs!</h1>
+                {{#each items}}
+                    <div class="post-preview">
+                        <a href="post/{{this.id}}">
+                            <h2 class="post-title">
+                                {{{ this.title }}}
+                            </h2>
+                            <h3 class="post-subtitle">
+                                {{{ this.subtitle }}}
+                            </h3>
+                        </a>
+                        <p class="post-meta">
+                            Posted by Suhas Chitade on {{ this.created_at }}
+                        </p>
+                    </div>
+                    <hr></hr>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+
 </section>
 
 {{/inline}}

@@ -44,8 +44,15 @@ struct PostContext {
     items: Vec<Post>,
     parent: &'static str,
 }
+#[derive(Serialize)]
+struct PostDetailsContext {
+    title: &'static str,
+    name: Option<String>,
+    items: Post,
+    parent: &'static str,
+}
 
-#[get("/")]
+#[get("/index")]
 fn index() -> Template {
     //Redirect::to("/hello/unknown")
     Template::render("index", &TemplateContext{
@@ -74,17 +81,29 @@ fn about() -> Template {
     })
 }
 
+#[get("/post/<key>")]
+fn post(key: i32, connection: db::DbConn) -> Template {
+
+    println!("Getting information of Post for key {}", key);
+
+    let post_details = (Post::get_details(key,&connection));
+
+    println!("title: {}", post_details[0].title);
+
+    Template::render("post", &PostContext{
+        title:"Post details",
+        name:None,
+        items:post_details,
+        parent:"layout",
+
+    })
 
 
-#[get("/posts")]
+}
+
+
+#[get("/")]
 fn posts(connection: db::DbConn) -> Template {
-//    let my_post = Post{
-//        id:1,
-//        user_id:2,
-//        title:"Ok ki".to_string(),
-//        content:"Tech ki".to_string(),
-//        published:false
-//    };
     println!("getting posts");
     let my_post =  (Post::read(&connection));
 
@@ -132,6 +151,7 @@ fn rocket() -> rocket::Rocket{
             .mount("/", StaticFiles::from("static/"))
             .mount("/", routes![index, hello,about])
             .mount("/", routes![posts])
+            .mount("/", routes![post])
            .register(catchers![not_found])
            .attach(Template::custom(|engines|{
                engines.handlebars.register_helper("wow", Box::new(wow_helper));

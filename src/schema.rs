@@ -8,6 +8,8 @@ table! {
         created_at -> Date,
         updated_at -> Date,
         active -> Bool,
+        image_path -> Varchar,
+        sub_title -> Text,
     }
 }
 
